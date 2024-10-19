@@ -6,7 +6,7 @@ public class MiniGun : Weapon
 {
     void Start()
     {
-        cooldown = 0;
+        cooldown = 0.1f;
         auto = true;
     }
 

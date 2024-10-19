@@ -2,10 +2,8 @@ using UnityEngine;
 
 public class MainClass : MonoBehaviour
 {
-    protected string dragonName = "Drogo";
-
     public string dragonAbility = "FireAttack";
-
+    protected string dragonName = "Drogo";  
     private string dragonClass = "Fire";
     public string GetName()
     { 
@@ -13,6 +11,7 @@ public class MainClass : MonoBehaviour
     }
     public string GetClass()
     {
-        return dragonName;
+        return dragonClass;
     }
 }
+    

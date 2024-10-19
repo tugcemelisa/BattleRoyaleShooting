@@ -16,8 +16,8 @@ public class Dragons : MonoBehaviour
     {
 
     }
-    public string PlayWithMe() 
+    public void PlayWithMe() 
     {
-        return name;
+        print("I Play with " + name);
     }
 }

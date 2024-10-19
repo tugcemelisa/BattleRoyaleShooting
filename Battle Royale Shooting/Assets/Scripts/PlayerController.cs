@@ -1,9 +1,22 @@
+using Unity.VisualScripting;
 using UnityEngine;
+
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    public enum Weapons
+    {
+        None,
+        Pistol,
+        Rifle,
+        MiniGun
+    }
+    Weapons weapons = Weapons.None;
+
     [SerializeField] float movementSpeed = 5f;
-    
+    [SerializeField] GameObject pistol, rifle, miniGun;
+    bool isPistol, isRifle, isMiniGun;
     float currentSpeed;
 
     [SerializeField] Rigidbody rb;
@@ -15,9 +28,9 @@ public class PlayerController : MonoBehaviour
 
     bool isGrounded = true;
 
-    [SerializeField] Animator anim;   
+    [SerializeField] Animator anim;
     void Start()
-    {        
+    {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         currentSpeed = movementSpeed;
@@ -30,11 +43,11 @@ public class PlayerController : MonoBehaviour
 
         direction = new Vector3(moveHorizontal, 0.0f, moveVertical);
         direction = transform.TransformDirection(direction);
-        if(direction.x != 0 || direction.z != 0)
+        if (direction.x != 0 || direction.z != 0)
         {
             anim.SetBool("Run", true);
         }
-        if(direction.x == 0 && direction.z == 0)
+        if (direction.x == 0 && direction.z == 0)
         {
             anim.SetBool("Run", false);
         }
@@ -44,9 +57,9 @@ public class PlayerController : MonoBehaviour
             isGrounded = false;
             anim.SetBool("Jump", true);
         }
-        if(Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift))
         {
-            if(stamina > 0)
+            if (stamina > 0)
             {
                 stamina -= Time.deltaTime;
                 currentSpeed = shiftSpeed;
@@ -57,11 +70,11 @@ public class PlayerController : MonoBehaviour
             }
         }
         else if (!Input.GetKey(KeyCode.LeftShift))
-        {            
-            stamina += Time.deltaTime;                      
+        {
+            stamina += Time.deltaTime;
             currentSpeed = movementSpeed;
         }
-        if(stamina > 5f)
+        if (stamina > 5f)
         {
             stamina = 5f;
         }
@@ -69,7 +82,35 @@ public class PlayerController : MonoBehaviour
         {
             stamina = 0;
         }
+        if (Input.GetKeyDown(KeyCode.Alpha1) && isPistol)
+        {
+            ChooseWeapon(Weapons.Pistol);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2) && isRifle)
+        {
+            ChooseWeapon(Weapons.Rifle);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3) && isMiniGun)
+        {
+            ChooseWeapon(Weapons.MiniGun);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            ChooseWeapon(Weapons.None);
+        }
+
     }
+    public void ChooseWeapon(Weapons weapons)
+    {
+        anim.SetBool("Pistol", weapons == Weapons.Pistol);
+        anim.SetBool("Assault", weapons == Weapons.Rifle);
+        anim.SetBool("MiniGun", weapons == Weapons.MiniGun);
+        anim.SetBool("NoWeapon", weapons == Weapons.None);
+        pistol.SetActive(weapons == Weapons.Pistol);
+        rifle.SetActive(weapons == Weapons.Rifle);
+        miniGun.SetActive(weapons == Weapons.MiniGun);
+    }
+
     void FixedUpdate()
     {
         rb.MovePosition(transform.position + direction * currentSpeed * Time.deltaTime);
@@ -78,5 +119,37 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = true;
         anim.SetBool("Jump", false);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        switch (other.gameObject.tag)
+        {
+            case "pistol":
+                if (!isPistol)
+                {
+                    isPistol = true;
+                    ChooseWeapon(Weapons.Pistol);
+                }
+                break;
+
+            case "rifle":
+                if (!isRifle)
+                {
+                    isRifle = true;
+                    ChooseWeapon(Weapons.Rifle);
+                }
+                break;
+
+            case "minigun":
+                if (!isMiniGun)
+                {
+                    isMiniGun = true;
+                    ChooseWeapon(Weapons.MiniGun);
+                }
+                break;
+            default:
+                break;
+        }
+        Destroy(other.gameObject);
     }
 }

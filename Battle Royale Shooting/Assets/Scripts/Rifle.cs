@@ -8,5 +8,8 @@ public class Rifle : Pistol
     {
         cooldown = 0.2f;
         auto = true;
+        ammoCurrent = 30;
+        ammoMax = 30;
+        ammoBackPack = 60;
     }
 }

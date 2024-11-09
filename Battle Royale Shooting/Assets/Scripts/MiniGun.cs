@@ -8,6 +8,9 @@ public class MiniGun : Weapon
     {
         cooldown = 0.1f;
         auto = true;
+        ammoCurrent = 100;
+        ammoMax = 100;
+        ammoBackPack = 200;
     }
 
     protected override void OnShoot()
@@ -21,6 +24,10 @@ public class MiniGun : Weapon
         if (Physics.Raycast(ray, out hit))
         {
             GameObject gameBullet = Instantiate(particle, hit.point, hit.transform.rotation);
+            if (hit.collider.CompareTag("enemy"))
+            {
+                hit.collider.gameObject.GetComponent<Enemy>().ChangeHealth(10);
+            }
             Destroy(gameBullet, 1);
         }
     }

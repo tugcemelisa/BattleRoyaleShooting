@@ -9,6 +9,9 @@ public class Pistol : Weapon
     {
         cooldown = 0;
         auto = false;
+        ammoCurrent = 10;
+        ammoMax= 10;
+        ammoBackPack = 30;
     }
 
     protected override void OnShoot()
@@ -19,6 +22,10 @@ public class Pistol : Weapon
         if (Physics.Raycast(ray, out hit))
         {
             GameObject gameBullet = Instantiate(particle, hit.point, hit.transform.rotation);
+            if(hit.collider.CompareTag("enemy"))
+            {
+                hit.collider.gameObject.GetComponent<Enemy>().ChangeHealth(10);
+            }
             Destroy(gameBullet, 1);
         }
     }

@@ -4,10 +4,16 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - pistol: {fileID: 7507905472395438225, guid: 245789ca16689774496406b5b88cc8d7, type: 3}
+  - pistol: {fileID: 3823321262691816068, guid: 226c568e48d1bbc45a3110f8660d2e2c, type: 3}
   - rifle: {fileID: 7775909171458005017, guid: 26c304c542935a646a21dd134e1c2cea, type: 3}
-  - miniGun: {fileID: 8760136976014523249, guid: a76b1e52016f1ce418151385392df0e9, type: 3}
+  - miniGun: {fileID: 2196376887939949475, guid: 79cfad6d28604f54a97b32d45af9d2b2, type: 3}
+  - pistolUI: {instanceID: 0}
+  - rifleUI: {instanceID: 0}
+  - miniGunUI: {instanceID: 0}
+  - cusror: {instanceID: 0}
   - rb: {instanceID: 0}
+  - weapon: {instanceID: 0}
+  - cameraScript: {instanceID: 0}
   - anim: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}

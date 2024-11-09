@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] float movementSpeed = 5f;
     [SerializeField] GameObject pistol, rifle, miniGun;
+
+    [SerializeField] Image pistolUI, rifleUI, miniGunUI, cusror;
+
     bool isPistol, isRifle, isMiniGun;
     float currentSpeed;
 
@@ -24,6 +27,11 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] float shiftSpeed = 10f;
     [SerializeField] float jumpForce = 7f;
+
+    int health;
+
+    [SerializeField] Weapon weapon;
+    [SerializeField] ThirdPersonCamera cameraScript;
     float stamina = 5f;
 
     bool isGrounded = true;
@@ -34,6 +42,17 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         currentSpeed = movementSpeed;
+        ChangeHealth(-100);
+    }
+    public void ChangeHealth(int count)
+    {
+        health -= count;
+        if (health <= 0)
+        {
+            anim.SetBool("Die", true);
+            ChooseWeapon(Weapons.None);
+            this.enabled = false;
+        }
     }
 
     void Update()
@@ -109,6 +128,15 @@ public class PlayerController : MonoBehaviour
         pistol.SetActive(weapons == Weapons.Pistol);
         rifle.SetActive(weapons == Weapons.Rifle);
         miniGun.SetActive(weapons == Weapons.MiniGun);
+
+        if (weapons != Weapons.None)
+        {
+            cusror.enabled = true;
+        }
+        else
+        {
+            cusror.enabled = false;
+        }
     }
 
     void FixedUpdate()
@@ -128,6 +156,7 @@ public class PlayerController : MonoBehaviour
                 if (!isPistol)
                 {
                     isPistol = true;
+                    pistolUI.color = Color.white;
                     ChooseWeapon(Weapons.Pistol);
                 }
                 break;
@@ -136,6 +165,7 @@ public class PlayerController : MonoBehaviour
                 if (!isRifle)
                 {
                     isRifle = true;
+                    rifleUI.color = Color.white;
                     ChooseWeapon(Weapons.Rifle);
                 }
                 break;
@@ -144,6 +174,7 @@ public class PlayerController : MonoBehaviour
                 if (!isMiniGun)
                 {
                     isMiniGun = true;
+                    miniGunUI.color = Color.white;
                     ChooseWeapon(Weapons.MiniGun);
                 }
                 break;
@@ -153,3 +184,4 @@ public class PlayerController : MonoBehaviour
         Destroy(other.gameObject);
     }
 }
+

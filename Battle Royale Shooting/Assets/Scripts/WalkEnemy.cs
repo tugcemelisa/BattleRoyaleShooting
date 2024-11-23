@@ -3,6 +3,7 @@ public class WalkEnemy : Enemy
 {
     [SerializeField] float speed;
     [SerializeField] float detectionDistance;
+    float patrolTimer;
     public override void Move()
     {        
         if (distance < detectionDistance && distance > attackDistance) 
@@ -10,6 +11,17 @@ public class WalkEnemy : Enemy
             transform.LookAt(player.transform);
             anim.SetBool("Run", true);            
             rb.MovePosition(transform.position + transform.forward * speed * Time.deltaTime);
+        }
+        else if (distance > detectionDistance)
+        {
+            rb.MovePosition(transform.position + transform.forward * speed * Time.deltaTime);
+            patrolTimer += Time.deltaTime;
+            anim.SetBool("Run", true);
+            if (patrolTimer > 3)
+            {
+                transform.Rotate(new Vector3(0, 90, 0));
+                patrolTimer = 0;
+            }
         }
         else
         {

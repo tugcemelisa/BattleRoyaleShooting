@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
         MiniGun
     }
     Weapons weapons = Weapons.None;
-
+    
     [SerializeField] float movementSpeed = 5f;
     [SerializeField] GameObject pistol, rifle, miniGun;
 
@@ -30,15 +30,16 @@ public class PlayerController : MonoBehaviour
 
     int health;
 
-    [SerializeField] Weapon weapon;
-    [SerializeField] ThirdPersonCamera cameraScript;
     float stamina = 5f;
+
+    [SerializeField] AudioSource characterSounds;
+    [SerializeField] AudioClip jump;    
 
     bool isGrounded = true;
 
-    [SerializeField] Animator anim;
+    [SerializeField] Animator anim;   
     void Start()
-    {
+    {        
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         currentSpeed = movementSpeed;
@@ -47,13 +48,14 @@ public class PlayerController : MonoBehaviour
     public void ChangeHealth(int count)
     {
         health -= count;
-        if (health <= 0)
+        if (health <= 0) 
         {
             anim.SetBool("Die", true);
             ChooseWeapon(Weapons.None);
             this.enabled = false;
         }
     }
+    
 
     void Update()
     {
@@ -62,23 +64,33 @@ public class PlayerController : MonoBehaviour
 
         direction = new Vector3(moveHorizontal, 0.0f, moveVertical);
         direction = transform.TransformDirection(direction);
-        if (direction.x != 0 || direction.z != 0)
+
+        if(direction.x != 0 || direction.z != 0)
         {
             anim.SetBool("Run", true);
+            if(!characterSounds.isPlaying && isGrounded)
+            {                
+                characterSounds.Play();
+            }            
         }
-        if (direction.x == 0 && direction.z == 0)
-        {
+        if(direction.x == 0 && direction.z == 0)
+        {            
             anim.SetBool("Run", false);
+            characterSounds.Stop();            
         }
+
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
             isGrounded = false;
+            characterSounds.Stop();
+            AudioSource.PlayClipAtPoint(jump, transform.position);
             anim.SetBool("Jump", true);
         }
-        if (Input.GetKey(KeyCode.LeftShift))
+
+        if(Input.GetKey(KeyCode.LeftShift))
         {
-            if (stamina > 0)
+            if(stamina > 0)
             {
                 stamina -= Time.deltaTime;
                 currentSpeed = shiftSpeed;
@@ -89,11 +101,11 @@ public class PlayerController : MonoBehaviour
             }
         }
         else if (!Input.GetKey(KeyCode.LeftShift))
-        {
-            stamina += Time.deltaTime;
+        {            
+            stamina += Time.deltaTime;                      
             currentSpeed = movementSpeed;
         }
-        if (stamina > 5f)
+        if(stamina > 5f)
         {
             stamina = 5f;
         }
@@ -101,7 +113,7 @@ public class PlayerController : MonoBehaviour
         {
             stamina = 0;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha1) && isPistol)
+        if(Input.GetKeyDown(KeyCode.Alpha1) && isPistol)
         {
             ChooseWeapon(Weapons.Pistol);
         }
@@ -128,8 +140,8 @@ public class PlayerController : MonoBehaviour
         pistol.SetActive(weapons == Weapons.Pistol);
         rifle.SetActive(weapons == Weapons.Rifle);
         miniGun.SetActive(weapons == Weapons.MiniGun);
-
-        if (weapons != Weapons.None)
+        
+        if(weapons != Weapons.None)
         {
             cusror.enabled = true;
         }
@@ -138,13 +150,13 @@ public class PlayerController : MonoBehaviour
             cusror.enabled = false;
         }
     }
-
+    
     void FixedUpdate()
     {
         rb.MovePosition(transform.position + direction * currentSpeed * Time.deltaTime);
     }
     void OnCollisionEnter(Collision collision)
-    {
+    {        
         isGrounded = true;
         anim.SetBool("Jump", false);
     }
@@ -182,6 +194,5 @@ public class PlayerController : MonoBehaviour
                 break;
         }
         Destroy(other.gameObject);
-    }
+    }    
 }
-

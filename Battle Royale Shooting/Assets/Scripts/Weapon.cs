@@ -7,6 +7,10 @@ public class Weapon : MonoBehaviour
 {
     [SerializeField] protected GameObject particle;
     [SerializeField] protected GameObject cam;
+
+    [SerializeField] AudioSource shoot;
+    [SerializeField] AudioClip bulletSound, noBulletSound, reload;
+
     protected int ammoCurrent;
     protected int ammoMax;
     protected int ammoBackPack;
@@ -31,6 +35,7 @@ public class Weapon : MonoBehaviour
         {
             if(ammoCurrent != ammoMax || ammoBackPack != 0)
             {
+                shoot.PlayOneShot(reload);
                 Invoke("Reload", 1);
             }
         }       
@@ -43,11 +48,17 @@ public class Weapon : MonoBehaviour
             {
                 if(ammoCurrent > 0) 
                 { 
-                    OnShoot();
+                    OnShoot();                    
                     timer = 0;
                     ammoCurrent = ammoCurrent - 1;
+                    shoot.PlayOneShot(bulletSound);   
+                    shoot.pitch = Random.Range(1f, 1.5f);
                 }
-            }           
+                else
+                {
+                    shoot.PlayOneShot(noBulletSound);
+                }
+            }            
         }
     }
     protected virtual void OnShoot()
@@ -60,6 +71,7 @@ public class Weapon : MonoBehaviour
 
     private void Reload()
     {
+        
         int ammoNeed = ammoMax - ammoCurrent; 
         if (ammoBackPack >= ammoNeed) 
         {

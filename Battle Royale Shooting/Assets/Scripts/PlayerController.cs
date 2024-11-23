@@ -12,38 +12,29 @@ public class PlayerController : MonoBehaviour
         Rifle,
         MiniGun
     }
-    Weapons weapons = Weapons.None;
+    Weapons weapons = Weapons.None;    
     
-    [SerializeField] float movementSpeed = 5f;
     [SerializeField] GameObject pistol, rifle, miniGun;
-
+    [SerializeField] AudioSource characterSounds;
+    [SerializeField] AudioClip jump;
     [SerializeField] Image pistolUI, rifleUI, miniGunUI, cusror;
-
-    bool isPistol, isRifle, isMiniGun;
-    float currentSpeed;
-
     [SerializeField] Rigidbody rb;
-    Vector3 direction;
-
+    [SerializeField] Animator anim;
     [SerializeField] float shiftSpeed = 10f;
     [SerializeField] float jumpForce = 7f;
-
-    int health;
-
-    float stamina = 5f;
-
-    [SerializeField] AudioSource characterSounds;
-    [SerializeField] AudioClip jump;    
-
+    [SerializeField] float movementSpeed = 5f;
+    Vector3 direction;
+    bool isPistol, isRifle, isMiniGun;
     bool isGrounded = true;
-
-    [SerializeField] Animator anim;   
+    float currentSpeed;
+    float stamina = 5f;
+    int health;      
     void Start()
     {        
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         currentSpeed = movementSpeed;
-        ChangeHealth(-100);
+        health = 100;
     }
     public void ChangeHealth(int count)
     {
@@ -54,9 +45,7 @@ public class PlayerController : MonoBehaviour
             ChooseWeapon(Weapons.None);
             this.enabled = false;
         }
-    }
-    
-
+    }   
     void Update()
     {
         float moveHorizontal = Input.GetAxis("Horizontal");

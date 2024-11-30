@@ -11,16 +11,16 @@ public class MenuManager : MonoBehaviourPunCallbacks
     [SerializeField] TMP_InputField inputField;
     void Start()
     {
-        PhotonNetwork.NickName = "Player" + Random.Range(1, 9999); // Assign a random number-labeled username to the player
-        Log("Player Name: " + PhotonNetwork.NickName);  // Display this username in the log area
-        PhotonNetwork.AutomaticallySyncScene = true; // Enable automatic scene synchronization between windows
-        PhotonNetwork.GameVersion = "1"; // Set the game version
-        PhotonNetwork.ConnectUsingSettings(); // Connect to the Photon server using predefined settings
+        PhotonNetwork.NickName = "Player" + Random.Range(1, 9999); //Никнейм
+        Log("Player Name: " + PhotonNetwork.NickName);
+        PhotonNetwork.AutomaticallySyncScene = true; //Автопереключение сцены
+        PhotonNetwork.GameVersion = "1"; //Версия игры
+        PhotonNetwork.ConnectUsingSettings(); //Подключается к серверу Photon
     }
     void Log(string message)
     {
-        logText.text += "\n"; // Move the text to the next line
-        logText.text += message;  // Add the message
+        logText.text += "\n";
+        logText.text += message;
     }
     public void CreateRoom()
     {
@@ -43,9 +43,5 @@ public class MenuManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.NickName = inputField.text;
         Log("New Player name: " + PhotonNetwork.NickName);
-    }
-    void Update()
-    {
-        
     }
 }

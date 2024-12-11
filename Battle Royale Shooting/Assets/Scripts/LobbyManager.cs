@@ -10,20 +10,36 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] TMP_Text ChatText;
     [SerializeField] TMP_InputField InputText;
     [SerializeField] TMP_Text PlayersText;
+
+    [SerializeField] GameObject startButton;
+    
     void Start()
     {
         RefreshPlayers();
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            startButton.SetActive(false);
+        }
+    }
+    public void StartGame()
+    {
+        PhotonNetwork.LoadLevel("Game");
+    }
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    {
+        Log(otherPlayer.NickName + " left the room");
+        RefreshPlayers();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            startButton.SetActive(true);
+        }
     }
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         Log(newPlayer.NickName + " entered the room");
         RefreshPlayers();
     }
-    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
-    {
-        Log(otherPlayer.NickName + " left the room");
-        RefreshPlayers();
-    }
+    
     void Update()
     {
         

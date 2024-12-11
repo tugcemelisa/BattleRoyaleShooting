@@ -1,9 +1,9 @@
+using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine;
-
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviourPunCallbacks
 {
     public enum Weapons
     {
@@ -28,13 +28,18 @@ public class PlayerController : MonoBehaviour
     bool isGrounded = true;
     float currentSpeed;
     float stamina = 5f;
-    int health;      
+    int health;
     void Start()
-    {        
+    {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         currentSpeed = movementSpeed;
         health = 100;
+        if (!photonView.IsMine)
+        {                       
+            transform.Find("Main Camera").gameObject.SetActive(false);
+            Destroy(GetComponent<PlayerController>());
+        }
     }
     public void ChangeHealth(int count)
     {
@@ -48,77 +53,76 @@ public class PlayerController : MonoBehaviour
     }   
     void Update()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
+            float moveHorizontal = Input.GetAxis("Horizontal");
+            float moveVertical = Input.GetAxis("Vertical");
 
-        direction = new Vector3(moveHorizontal, 0.0f, moveVertical);
-        direction = transform.TransformDirection(direction);
+            direction = new Vector3(moveHorizontal, 0.0f, moveVertical);
+            direction = transform.TransformDirection(direction);
 
-        if(direction.x != 0 || direction.z != 0)
-        {
-            anim.SetBool("Run", true);
-            if(!characterSounds.isPlaying && isGrounded)
-            {                
-                characterSounds.Play();
-            }            
-        }
-        if(direction.x == 0 && direction.z == 0)
-        {            
-            anim.SetBool("Run", false);
-            characterSounds.Stop();            
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
-            isGrounded = false;
-            characterSounds.Stop();
-            AudioSource.PlayClipAtPoint(jump, transform.position);
-            anim.SetBool("Jump", true);
-        }
-
-        if(Input.GetKey(KeyCode.LeftShift))
-        {
-            if(stamina > 0)
+            if (direction.x != 0 || direction.z != 0)
             {
-                stamina -= Time.deltaTime;
-                currentSpeed = shiftSpeed;
+                anim.SetBool("Run", true);
+                if (!characterSounds.isPlaying && isGrounded)
+                {
+                    characterSounds.Play();
+                }
             }
-            else
+            if (direction.x == 0 && direction.z == 0)
             {
+                anim.SetBool("Run", false);
+                characterSounds.Stop();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            {
+                rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+                isGrounded = false;
+                characterSounds.Stop();
+                AudioSource.PlayClipAtPoint(jump, transform.position);
+                anim.SetBool("Jump", true);
+            }
+
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                if (stamina > 0)
+                {
+                    stamina -= Time.deltaTime;
+                    currentSpeed = shiftSpeed;
+                }
+                else
+                {
+                    currentSpeed = movementSpeed;
+                }
+            }
+            else if (!Input.GetKey(KeyCode.LeftShift))
+            {
+                stamina += Time.deltaTime;
                 currentSpeed = movementSpeed;
             }
-        }
-        else if (!Input.GetKey(KeyCode.LeftShift))
-        {            
-            stamina += Time.deltaTime;                      
-            currentSpeed = movementSpeed;
-        }
-        if(stamina > 5f)
-        {
-            stamina = 5f;
-        }
-        else if (stamina < 0)
-        {
-            stamina = 0;
-        }
-        if(Input.GetKeyDown(KeyCode.Alpha1) && isPistol)
-        {
-            ChooseWeapon(Weapons.Pistol);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2) && isRifle)
-        {
-            ChooseWeapon(Weapons.Rifle);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3) && isMiniGun)
-        {
-            ChooseWeapon(Weapons.MiniGun);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            ChooseWeapon(Weapons.None);
-        }
-
+            if (stamina > 5f)
+            {
+                stamina = 5f;
+            }
+            else if (stamina < 0)
+            {
+                stamina = 0;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha1) && isPistol)
+            {
+                ChooseWeapon(Weapons.Pistol);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2) && isRifle)
+            {
+                ChooseWeapon(Weapons.Rifle);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3) && isMiniGun)
+            {
+                ChooseWeapon(Weapons.MiniGun);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha0))
+            {
+                ChooseWeapon(Weapons.None);
+            }    
     }
     public void ChooseWeapon(Weapons weapons)
     {

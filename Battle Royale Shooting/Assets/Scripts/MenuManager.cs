@@ -11,11 +11,11 @@ public class MenuManager : MonoBehaviourPunCallbacks
     [SerializeField] TMP_InputField inputField;
     void Start()
     {
-        PhotonNetwork.NickName = "Player" + Random.Range(1, 9999); //Никнейм
+        PhotonNetwork.NickName = "Player" + Random.Range(1, 9999); 
         Log("Player Name: " + PhotonNetwork.NickName);
-        PhotonNetwork.AutomaticallySyncScene = true; //Автопереключение сцены
-        PhotonNetwork.GameVersion = "1"; //Версия игры
-        PhotonNetwork.ConnectUsingSettings(); //Подключается к серверу Photon
+        PhotonNetwork.AutomaticallySyncScene = true; 
+        PhotonNetwork.GameVersion = "1"; 
+        PhotonNetwork.ConnectUsingSettings();
     }
     void Log(string message)
     {

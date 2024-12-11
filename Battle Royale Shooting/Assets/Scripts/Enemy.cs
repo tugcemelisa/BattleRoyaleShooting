@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 public class Enemy : MonoBehaviour
 {
@@ -5,7 +6,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float attackDistance;    
     [SerializeField] protected int damage;
     [SerializeField] protected float cooldown;
-    protected GameObject player;    
+    protected GameObject player;
     protected Animator anim;
     protected Rigidbody rb;
     protected float distance;
@@ -36,8 +37,8 @@ public class Enemy : MonoBehaviour
     }
 
     private void Update() 
-    {
-        distance = Vector3.Distance(transform.position, player.transform.position);
+    {        
+        distance = Vector3.Distance(transform.position,player.transform.position);
         if (!dead)
         {            
             Attack();

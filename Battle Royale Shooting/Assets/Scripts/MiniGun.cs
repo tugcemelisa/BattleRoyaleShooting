@@ -1,3 +1,5 @@
+using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +20,7 @@ public class MiniGun : Weapon
         Vector3 rayStartPosition = new Vector3(Screen.width / 2, Screen.height / 2, 0);
 
         Vector3 drift = new Vector3(Random.Range(-15, 15), Random.Range(-15, 15), Random.Range(-15, 15));
-        
+
         Ray ray = cam.GetComponent<Camera>().ScreenPointToRay(rayStartPosition + drift);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
@@ -26,7 +28,8 @@ public class MiniGun : Weapon
             GameObject gameBullet = Instantiate(particle, hit.point, hit.transform.rotation);
             if (hit.collider.CompareTag("enemy"))
             {
-                hit.collider.gameObject.GetComponent<Enemy>().ChangeHealth(10);
+                //hit.collider.gameObject.GetComponent<Enemy>().ChangeHealth(10);
+                hit.collider.gameObject.GetComponent<Enemy>().GetDamage(10);
             }
             Destroy(gameBullet, 1);
         }

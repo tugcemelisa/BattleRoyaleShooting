@@ -1,9 +1,10 @@
 using Photon.Pun;
+using Photon.Realtime;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviourPunCallbacks
+public class PlayerController : MonoBehaviourPunCallbacks /*IPunObservable*/
 {
     public enum Weapons
     {
@@ -12,8 +13,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         Rifle,
         MiniGun
     }
-    Weapons weapons = Weapons.None;    
-    
+    Weapons weapons = Weapons.None;
+
     [SerializeField] GameObject pistol, rifle, miniGun;
     [SerializeField] AudioSource characterSounds;
     [SerializeField] AudioClip jump;
@@ -29,6 +30,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
     float currentSpeed;
     float stamina = 5f;
     int health;
+    public bool dead;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -36,94 +39,103 @@ public class PlayerController : MonoBehaviourPunCallbacks
         currentSpeed = movementSpeed;
         health = 100;
         if (!photonView.IsMine)
-        {                       
+        {
             transform.Find("Main Camera").gameObject.SetActive(false);
-            Destroy(GetComponent<PlayerController>());
+            transform.Find("Canvas").gameObject.SetActive(false);
+            this.enabled = false;
         }
     }
     public void ChangeHealth(int count)
     {
         health -= count;
-        if (health <= 0) 
+        if (health <= 0)
         {
+            dead = true;
             anim.SetBool("Die", true);
             ChooseWeapon(Weapons.None);
             this.enabled = false;
         }
-    }   
+    }
+
+
     void Update()
     {
-            float moveHorizontal = Input.GetAxis("Horizontal");
-            float moveVertical = Input.GetAxis("Vertical");
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
 
-            direction = new Vector3(moveHorizontal, 0.0f, moveVertical);
-            direction = transform.TransformDirection(direction);
+        direction = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        direction = transform.TransformDirection(direction);
 
-            if (direction.x != 0 || direction.z != 0)
+        if (direction.x != 0 || direction.z != 0)
+        {
+            anim.SetBool("Run", true);
+            if (!characterSounds.isPlaying && isGrounded)
             {
-                anim.SetBool("Run", true);
-                if (!characterSounds.isPlaying && isGrounded)
-                {
-                    characterSounds.Play();
-                }
+                characterSounds.Play();
             }
-            if (direction.x == 0 && direction.z == 0)
-            {
-                anim.SetBool("Run", false);
-                characterSounds.Stop();
-            }
+        }
+        if (direction.x == 0 && direction.z == 0)
+        {
+            anim.SetBool("Run", false);
+            characterSounds.Stop();
+        }
 
-            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-            {
-                rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
-                isGrounded = false;
-                characterSounds.Stop();
-                AudioSource.PlayClipAtPoint(jump, transform.position);
-                anim.SetBool("Jump", true);
-            }
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+            isGrounded = false;
+            characterSounds.Stop();
+            AudioSource.PlayClipAtPoint(jump, transform.position);
+            anim.SetBool("Jump", true);
+        }
 
-            if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            if (stamina > 0)
             {
-                if (stamina > 0)
-                {
-                    stamina -= Time.deltaTime;
-                    currentSpeed = shiftSpeed;
-                }
-                else
-                {
-                    currentSpeed = movementSpeed;
-                }
+                stamina -= Time.deltaTime;
+                currentSpeed = shiftSpeed;
             }
-            else if (!Input.GetKey(KeyCode.LeftShift))
+            else
             {
-                stamina += Time.deltaTime;
                 currentSpeed = movementSpeed;
             }
-            if (stamina > 5f)
-            {
-                stamina = 5f;
-            }
-            else if (stamina < 0)
-            {
-                stamina = 0;
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha1) && isPistol)
-            {
-                ChooseWeapon(Weapons.Pistol);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2) && isRifle)
-            {
-                ChooseWeapon(Weapons.Rifle);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha3) && isMiniGun)
-            {
-                ChooseWeapon(Weapons.MiniGun);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha0))
-            {
-                ChooseWeapon(Weapons.None);
-            }    
+        }
+        else if (!Input.GetKey(KeyCode.LeftShift))
+        {
+            stamina += Time.deltaTime;
+            currentSpeed = movementSpeed;
+        }
+        if (stamina > 5f)
+        {
+            stamina = 5f;
+        }
+        else if (stamina < 0)
+        {
+            stamina = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha1) && isPistol)
+        {
+            //ChooseWeapon(Weapons.Pistol);
+            photonView.RPC("ChooseWeapon", RpcTarget.All, Weapons.Pistol);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2) && isRifle)
+        {
+            //ChooseWeapon(Weapons.Rifle);
+            photonView.RPC("ChooseWeapon", RpcTarget.All, Weapons.Rifle);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3) && isMiniGun)
+        {
+            //ChooseWeapon(Weapons.MiniGun);
+            photonView.RPC("ChooseWeapon", RpcTarget.All, Weapons.MiniGun);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            //ChooseWeapon(Weapons.None);
+            photonView.RPC("ChooseWeapon", RpcTarget.All, Weapons.None);
+        }
     }
+    [PunRPC]
     public void ChooseWeapon(Weapons weapons)
     {
         anim.SetBool("Pistol", weapons == Weapons.Pistol);
@@ -133,8 +145,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         pistol.SetActive(weapons == Weapons.Pistol);
         rifle.SetActive(weapons == Weapons.Rifle);
         miniGun.SetActive(weapons == Weapons.MiniGun);
-        
-        if(weapons != Weapons.None)
+
+        if (weapons != Weapons.None)
         {
             cusror.enabled = true;
         }
@@ -143,13 +155,27 @@ public class PlayerController : MonoBehaviourPunCallbacks
             cusror.enabled = false;
         }
     }
-    
+    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    //{
+    //    if (stream.IsWriting)
+    //    {
+    //        stream.SendNext(weapons);
+    //    }
+    //    else if (stream.IsReading)
+    //    {
+    //        weapons = (Weapons)stream.ReceiveNext();
+    //        pistol.SetActive(weapons == Weapons.Pistol);
+    //        rifle.SetActive(weapons == Weapons.Rifle);
+    //        miniGun.SetActive(weapons == Weapons.MiniGun);
+    //    }
+    //}
+
     void FixedUpdate()
     {
         rb.MovePosition(transform.position + direction * currentSpeed * Time.deltaTime);
     }
     void OnCollisionEnter(Collision collision)
-    {        
+    {
         isGrounded = true;
         anim.SetBool("Jump", false);
     }
@@ -187,5 +213,5 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 break;
         }
         Destroy(other.gameObject);
-    }    
+    }
 }

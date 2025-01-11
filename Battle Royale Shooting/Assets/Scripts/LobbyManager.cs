@@ -4,6 +4,7 @@ using Photon.Pun;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEditor;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
@@ -12,18 +13,26 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] TMP_Text PlayersText;
 
     [SerializeField] GameObject startButton;
-    
+
     void Start()
     {
+        Cursor.lockState = CursorLockMode.None;
         RefreshPlayers();
         if (!PhotonNetwork.IsMasterClient)
         {
             startButton.SetActive(false);
         }
+        if (PlayerPrefs.HasKey("Winner") && PhotonNetwork.IsMasterClient)
+        {
+            string winner = PlayerPrefs.GetString("Winner");
+            photonView.RPC("ShowMessage", RpcTarget.All, "The last match was won: " + winner);
+            PlayerPrefs.DeleteAll();
+        }
     }
     public void StartGame()
     {
         PhotonNetwork.LoadLevel("Game");
+
     }
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
@@ -39,10 +48,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         Log(newPlayer.NickName + " entered the room");
         RefreshPlayers();
     }
-    
+
     void Update()
     {
-        
+
     }
     public void LeaveRoom()
     {
@@ -53,12 +62,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         ChatText.text += "\n";
         ChatText.text += message;
     }
-   
+
     public override void OnLeftRoom()
     {
         SceneManager.LoadScene(0);
     }
-    
+
     [PunRPC]
     public void ShowMessage(string message, PhotonMessageInfo info)
     {

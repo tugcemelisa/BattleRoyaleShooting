@@ -31,9 +31,16 @@ public class PlayerController : MonoBehaviourPunCallbacks /*IPunObservable*/
     float stamina = 5f;
     int health;
     public bool dead;
+    TextUpdate textUpdate;
+    [SerializeField] GameObject damageUi;
+    GameManager gameManager;
 
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
+        gameManager.ChangePlayersList();
+
+        textUpdate = GetComponent<TextUpdate>();
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         currentSpeed = movementSpeed;
@@ -45,18 +52,32 @@ public class PlayerController : MonoBehaviourPunCallbacks /*IPunObservable*/
             this.enabled = false;
         }
     }
+    public void GetDamage(int count)
+    {
+        photonView.RPC("ChangeHealth", RpcTarget.All, count);
+    }
+    [PunRPC]
     public void ChangeHealth(int count)
     {
         health -= count;
+        textUpdate.SetHealth(health);
+        damageUi.SetActive(true);
+        Invoke("RemoveDamageUi", 0.1f);
         if (health <= 0)
         {
             dead = true;
             anim.SetBool("Die", true);
+            transform.Find("Main Camera").GetComponent<ThirdPersonCamera>().isSpectator = true;
             ChooseWeapon(Weapons.None);
+            gameManager.ChangePlayersList();
+            //gameManager.PlayerDied(gameObject.name);
             this.enabled = false;
         }
     }
-
+    void RemoveDamageUi()
+    {
+        damageUi.SetActive(false);
+    }
 
     void Update()
     {
@@ -116,22 +137,18 @@ public class PlayerController : MonoBehaviourPunCallbacks /*IPunObservable*/
         }
         if (Input.GetKeyDown(KeyCode.Alpha1) && isPistol)
         {
-            //ChooseWeapon(Weapons.Pistol);
             photonView.RPC("ChooseWeapon", RpcTarget.All, Weapons.Pistol);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2) && isRifle)
         {
-            //ChooseWeapon(Weapons.Rifle);
             photonView.RPC("ChooseWeapon", RpcTarget.All, Weapons.Rifle);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3) && isMiniGun)
         {
-            //ChooseWeapon(Weapons.MiniGun);
             photonView.RPC("ChooseWeapon", RpcTarget.All, Weapons.MiniGun);
         }
         if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            //ChooseWeapon(Weapons.None);
             photonView.RPC("ChooseWeapon", RpcTarget.All, Weapons.None);
         }
     }
@@ -155,21 +172,6 @@ public class PlayerController : MonoBehaviourPunCallbacks /*IPunObservable*/
             cusror.enabled = false;
         }
     }
-    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    //{
-    //    if (stream.IsWriting)
-    //    {
-    //        stream.SendNext(weapons);
-    //    }
-    //    else if (stream.IsReading)
-    //    {
-    //        weapons = (Weapons)stream.ReceiveNext();
-    //        pistol.SetActive(weapons == Weapons.Pistol);
-    //        rifle.SetActive(weapons == Weapons.Rifle);
-    //        miniGun.SetActive(weapons == Weapons.MiniGun);
-    //    }
-    //}
-
     void FixedUpdate()
     {
         rb.MovePosition(transform.position + direction * currentSpeed * Time.deltaTime);
@@ -214,4 +216,6 @@ public class PlayerController : MonoBehaviourPunCallbacks /*IPunObservable*/
         }
         Destroy(other.gameObject);
     }
+
+
 }

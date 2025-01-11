@@ -683,6 +683,7 @@ MonoBehaviour:
   jumpForce: 7
   movementSpeed: 5
   dead: 0
+  damageUi: {fileID: 0}
 --- !u!114 &1882088235126611010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3277,6 +3278,8 @@ MonoBehaviour:
   mouseSense: 1
   lookUp: -15
   lookDown: 20
+  isSpectator: 0
+  speed: 50
 --- !u!1 &8897331784347889395
 GameObject:
   m_ObjectHideFlags: 0

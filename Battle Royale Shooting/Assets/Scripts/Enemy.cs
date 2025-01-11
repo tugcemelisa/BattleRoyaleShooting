@@ -2,6 +2,8 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 public class Enemy : MonoBehaviourPunCallbacks
 {
     [SerializeField] protected int health;
@@ -11,13 +13,13 @@ public class Enemy : MonoBehaviourPunCallbacks
     protected GameObject player;
 
     protected GameObject[] players;
-    //protected GameObject closestPlayer;
 
     protected Animator anim;
     protected Rigidbody rb;
     protected float distance;
     protected float timer;
-    bool dead = false;
+    public bool dead = false;
+    [SerializeField] Image healthBar;
 
     public virtual void Move()
     {
@@ -33,6 +35,8 @@ public class Enemy : MonoBehaviourPunCallbacks
     public void ChangeHealth(int count)
     {
         health -= count;
+        float fillPercent = health / 100f;
+        healthBar.fillAmount = fillPercent;
         if (health <= 0)
         {
             dead = true;
@@ -43,6 +47,7 @@ public class Enemy : MonoBehaviourPunCallbacks
     }
     void Start()
     {
+
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         CheckPlayers();

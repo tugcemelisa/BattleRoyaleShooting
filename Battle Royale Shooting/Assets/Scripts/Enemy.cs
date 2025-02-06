@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviourPunCallbacks
     [SerializeField] protected float attackDistance;
     [SerializeField] protected int damage;
     [SerializeField] protected float cooldown;
+    [SerializeField] protected Collider selfCollider; // değişiklik
     protected GameObject player;
 
     protected GameObject[] players;
@@ -37,10 +38,10 @@ public class Enemy : MonoBehaviourPunCallbacks
         health -= count;
         float fillPercent = health / 100f;
         healthBar.fillAmount = fillPercent;
-        if (health <= 0)
+        if (health <= 0 && !dead) // değişiklik
         {
             dead = true;
-            GetComponent<Collider>().enabled = false;
+            selfCollider.enabled = false; // değişiklik
             anim.enabled = true;
             anim.SetBool("Die", true);
         }
@@ -73,13 +74,18 @@ public class Enemy : MonoBehaviourPunCallbacks
 
             }
         }
-        if (player != null)
+        if (player != null && !player.GetComponent<PlayerController>().dead)
         {
             distance = Vector3.Distance(transform.position, player.transform.position);
             if (!dead)
             {
                 Attack();
             }
+        }
+        else
+        {
+            player = null;
+            distance = 400;
         }
     }
     private void FixedUpdate()

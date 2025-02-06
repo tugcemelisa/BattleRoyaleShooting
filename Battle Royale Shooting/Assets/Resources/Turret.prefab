@@ -812,12 +812,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5139644279801878315}
-  - component: {fileID: 5527478680880405379}
-  - component: {fileID: 6551914743207858639}
-  - component: {fileID: 4975645277396059020}
   m_Layer: 0
   m_Name: Turret
-  m_TagString: enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -840,65 +837,6 @@ Transform:
   - {fileID: 3317819135300680519}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5527478680880405379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7043502593000204759}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80bfd4b7f876c9d40b36308c15e6bcaa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 100
-  attackDistance: 100
-  damage: 10
-  cooldown: 3
-  dead: 0
-  healthBar: {fileID: 0}
-  bulletPos: {fileID: 1276097830144529144}
-  lineRenderer: {fileID: 3322164552899918055}
---- !u!114 &6551914743207858639
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7043502593000204759}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: 4975645277396059020}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &4975645277396059020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7043502593000204759}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!1 &7592797075406620397
 GameObject:
   m_ObjectHideFlags: 0
@@ -915,7 +853,6 @@ GameObject:
   - component: {fileID: 3593724465981653813}
   - component: {fileID: 4351658037479132139}
   - component: {fileID: 2479719607713043433}
-  - component: {fileID: 5025869598472104047}
   - component: {fileID: 6386504654079759350}
   m_Layer: 0
   m_Name: turret_head1
@@ -1054,6 +991,7 @@ MonoBehaviour:
   attackDistance: 100
   damage: 5
   cooldown: 3
+  selfCollider: {fileID: 3081912684108276400}
   dead: 0
   healthBar: {fileID: 8471275638955617518}
   bulletPos: {fileID: 1276097830144529144}
@@ -1098,30 +1036,6 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &5025869598472104047
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7592797075406620397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: 2479719607713043433}
-  - {fileID: 6386504654079759350}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!114 &6386504654079759350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1136,8 +1050,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
-  m_SynchronizeParameters: []
-  m_SynchronizeLayers: []
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 0
+    Name: Die
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!1 &7727748920822139655
 GameObject:
   m_ObjectHideFlags: 0

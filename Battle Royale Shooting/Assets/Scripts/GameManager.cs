@@ -57,8 +57,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (activePlayers.Count <= 1 && checkPlayers > 0)
         {
-            PlayerPrefs.SetString("Winner", activePlayers[0]);
-            var enemies = GameObject.FindGameObjectsWithTag("enemy");
+            if (activePlayers.Count > 0) // değişiklik
+            {
+                PlayerPrefs.SetString("Winner", activePlayers[0]); // değişiklik
+            }
+            var enemies = GameObject.FindGameObjectsWithTag("enemy"); 
             foreach (GameObject enemy in enemies)
             {
                 enemy.GetComponent<Enemy>().ChangeHealth(100);

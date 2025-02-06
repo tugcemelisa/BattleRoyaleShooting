@@ -513,6 +513,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4351658037479132139, guid: 3078bac168209e64d9116d281d599d28, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5139644279801878315, guid: 3078bac168209e64d9116d281d599d28, type: 3}
       propertyPath: m_LocalPosition.x
       value: 743.1
@@ -553,13 +557,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5527478680880405379, guid: 3078bac168209e64d9116d281d599d28, type: 3}
-      propertyPath: healthBar
-      value: 
-      objectReference: {fileID: 912649087}
     - target: {fileID: 7043502593000204759, guid: 3078bac168209e64d9116d281d599d28, type: 3}
       propertyPath: m_Name
       value: Turret
+      objectReference: {fileID: 0}
+    - target: {fileID: 7043502593000204759, guid: 3078bac168209e64d9116d281d599d28, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5824,11 +5828,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2894021406452495940, guid: 0fab77b10c2b5ea499c0f29f5124f613, type: 3}
       propertyPath: sceneViewId
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6257552194039523820, guid: 0fab77b10c2b5ea499c0f29f5124f613, type: 3}
       propertyPath: m_Name
       value: WalkEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 6257552194039523820, guid: 0fab77b10c2b5ea499c0f29f5124f613, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7156449123679654787, guid: 0fab77b10c2b5ea499c0f29f5124f613, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5875,17 +5883,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0fab77b10c2b5ea499c0f29f5124f613, type: 3}
---- !u!114 &912649087 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7646903546622487747, guid: 0fab77b10c2b5ea499c0f29f5124f613, type: 3}
-  m_PrefabInstance: {fileID: 912649086}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &919057527
 GameObject:
   m_ObjectHideFlags: 0
@@ -6728,7 +6725,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2985201338543385087, guid: f038216036f43714ab839fc1680e35b2, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4974248586922492100, guid: f038216036f43714ab839fc1680e35b2, type: 3}
       propertyPath: sceneViewId

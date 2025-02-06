@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviourPunCallbacks /*IPunObservable*/
         textUpdate.SetHealth(health);
         damageUi.SetActive(true);
         Invoke("RemoveDamageUi", 0.1f);
-        if (health <= 0)
+        if (health <= 0 && !dead)
         {
             dead = true;
             anim.SetBool("Die", true);
@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviourPunCallbacks /*IPunObservable*/
             gameManager.ChangePlayersList();
             //gameManager.PlayerDied(gameObject.name);
             this.enabled = false;
-        }
+        } // değişiklik
     }
     void RemoveDamageUi()
     {

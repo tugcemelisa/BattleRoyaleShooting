@@ -24,12 +24,12 @@ public class Weapon : MonoBehaviourPunCallbacks
     {
         timer = cooldown;
 
-        // PhotonView'nin varlýðýný kontrol etmiyoruz, çünkü Photon bileþenini zaten eklediðimizden emin olacaðýz.
+        // PhotonView'nin varlï¿½ï¿½ï¿½nï¿½ kontrol etmiyoruz, ï¿½ï¿½nkï¿½ Photon bileï¿½enini zaten eklediï¿½imizden emin olacaï¿½ï¿½z.
     }
 
     private void Update()
     {
-        // Eðer bu nesne bize aitse (PhotonView ile kontrol)
+        // Eï¿½er bu nesne bize aitse (PhotonView ile kontrol)
         if (photonView.IsMine)
         {
             timer += Time.deltaTime;

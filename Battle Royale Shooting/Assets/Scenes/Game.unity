@@ -6675,9 +6675,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 346208379290775314, guid: f038216036f43714ab839fc1680e35b2, type: 3}
+      propertyPath: m_TagString
+      value: minigun
+      objectReference: {fileID: 0}
     - target: {fileID: 829635311715051537, guid: f038216036f43714ab839fc1680e35b2, type: 3}
       propertyPath: sceneViewId
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2339245731100191892, guid: f038216036f43714ab839fc1680e35b2, type: 3}
+      propertyPath: m_TagString
+      value: rifle
       objectReference: {fileID: 0}
     - target: {fileID: 2985201338543385057, guid: f038216036f43714ab839fc1680e35b2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6734,6 +6742,10 @@ PrefabInstance:
     - target: {fileID: 5074352343497581648, guid: f038216036f43714ab839fc1680e35b2, type: 3}
       propertyPath: sceneViewId
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7130711084845646798, guid: f038216036f43714ab839fc1680e35b2, type: 3}
+      propertyPath: m_TagString
+      value: pistol
       objectReference: {fileID: 0}
     - target: {fileID: 8834713194264692238, guid: f038216036f43714ab839fc1680e35b2, type: 3}
       propertyPath: sceneViewId

@@ -51,16 +51,16 @@ public class ThirdPersonCamera : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                // Eðer imleç kitliyse...
+                // Eï¿½er imleï¿½ kitliyse...
                 if (Cursor.lockState == CursorLockMode.Locked)
                 {
-                    // Kilidi açalým
+                    // Kilidi aï¿½alï¿½m
                     Cursor.lockState = CursorLockMode.None;
                 }
-                // Diðer durumda...
+                // Diï¿½er durumda...
                 else
                 {
-                    // Ýmleci kitleyelim
+                    // ï¿½mleci kitleyelim
                     Cursor.lockState = CursorLockMode.Locked;
                 }
             }

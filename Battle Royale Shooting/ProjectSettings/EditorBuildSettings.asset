@@ -6,12 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Menu.unity
-    guid: 693eac51ce443424b922ecf5f43d27a7
+    path: Assets/Kodland_PlayerPrefs/Fox_Scenes/Menu.unity
+    guid: 8823d5fb7864cb045a1d63447455b60f
   - enabled: 1
-    path: Assets/Scenes/Lobby.unity
-    guid: 081d83f42b3708e4b8b4b77d0e3090ad
-  - enabled: 1
-    path: Assets/Scenes/Game.unity
-    guid: 1b126e989655c1e4caf6605ffead3ca1
+    path: Assets/Kodland_PlayerPrefs/Fox_Scenes/Game.unity
+    guid: c732593fe76e5a84197f9cd13963f706
   m_configObjects: {}
